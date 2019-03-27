@@ -27,7 +27,7 @@ const calculator = {
     const { first_operand, displayValue, operator } = calculator
     //adding operator keys and first operand to calc rendering
     const inputValue = parseFloat(displayValue);
-  //parsefloat makes it so decimals will be cut off. should cut off after 2.
+  //parsefloat makes it so decimals will be cut off. should cut off after 2 after decimal function is written.
     if (operator && calculator.second_operand) 
     //if operator and the second operand are inputed run next commands
      {
@@ -72,4 +72,41 @@ const calculator = {
     display.value = calculator.displayValue;
   } //updating where the numbers will be displayed(want them to display on "screen")
   
+  updateDisplay();
   
+  function inputDecimal(dot) {
+    if (calculator.waitingForSecondOperand === true) return;
+    
+    // If the `displayValue` does not contain a decimal point
+    if (!calculator.displayValue.includes(dot)) {
+      // Append the decimal point
+      calculator.displayValue += dot;
+    }
+  }
+  const keys = document.querySelector('.calculator-keys');
+  keys.addEventListener('click', (event) => {
+    const { target } = event;
+    if (!target.matches('button')) {
+      return;
+    }
+  
+    if (target.classList.contains('operator')) {
+      handleOperator(target.value);
+          updateDisplay();
+      return;
+    }
+  
+    if (target.classList.contains('decimal')) {
+      inputDecimal(target.value);
+          updateDisplay();
+      return;
+    }
+  
+    if (target.classList.contains('AC')) {
+      console.log('clear', target.value);
+      return;
+    }
+  
+    inputDigit(target.value);
+    updateDisplay();
+  });
